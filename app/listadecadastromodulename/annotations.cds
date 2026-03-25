@@ -1,0 +1,1 @@
+using AulasBTP as service from '../../srv/service';
