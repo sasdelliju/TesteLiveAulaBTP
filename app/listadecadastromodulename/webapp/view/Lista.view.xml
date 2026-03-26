@@ -94,5 +94,29 @@
     
     </List>
 
+    <List 
+        headerText="Products"
+        headerLevel="H2"
+        items="{
+			path : '/Cadastro'
+		}" >
+            <StandardListItem 
+                title="{ID}"
+                counter="">
+            </StandardListItem>
+    
+    </List>
+
+    <List 
+        headerText="Products"
+        headerLevel="H2"
+        items="{oModelLista>/Lista2}" >
+            <StandardListItem 
+                title="{oModelLista>ID} - {oModelLista>name}"
+                counter="">
+            </StandardListItem>
+    
+    </List>		
+
 	</Page>
 </mvc:View>

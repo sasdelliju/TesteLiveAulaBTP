@@ -7,7 +7,6 @@ sap.ui.define([
     return Controller.extend("listadecadastromodulename.controller.Lista", {
 
         onInit : function (){
-            this.createModel(); // <-- FALTAVA ISSO
             this.oRouter = sap.ui.core.UIComponent.getRouterFor(this);
             this.oRouter
             .getTarget("TargetLista") //sempre alterar o target
@@ -15,6 +14,7 @@ sap.ui.define([
         },
 
         handleRouteMatched: function () {
+            this.createModel(); // <-- FALTAVA ISSO            
             this.getTableCapacity();
         },
 
@@ -50,13 +50,36 @@ sap.ui.define([
             var teste;
         },
 
-        //somente no V2
         getTableCapacity : async function() {
-            let oDataModel = this.getOwnerComponent().getModel();
+            let oData;
+            let oModel = this.getOwnerComponent().getModel();
             let Service = "/Cadastro"
-            //let Service = "/RequisicaoCadastro"
 
-            return await new Promise(function (resolve, reject){
+            let oFilter = new sap.ui.model.Filter("ID", sap.ui.model.FilterOperator.EQ, 2);
+            
+            //V4 - Tipo 1
+            let oListBinding = oModel.bindList(Service);
+            oListBinding.filter([oFilter]);
+            let aContext = await oListBinding.requestContexts();
+
+            if (aContext.length > 0){
+                oData = aContext[0].getObject();
+
+                let payload = [
+                    {
+                        ID : oData.ID,
+                        name : oData.nome,
+                        cpf: oData.cpf
+                    }
+                ]
+
+                if(oData){
+                    this.oViewModel.setProperty("/Lista2", payload);
+                }
+            }
+
+            //V2
+            /*return await new Promise(function (resolve, reject){
                 oDataModel.read(Service, {
                     success : function (data) {
                         resolve(data);
@@ -65,8 +88,8 @@ sap.ui.define([
                             reject(oError);
                         }.bind(this),
                 });
-            });
-        }
+            }); */
+        },
 
     });
 });
