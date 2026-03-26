@@ -6,11 +6,11 @@ sap.ui.define([
 
     return Controller.extend("listadecadastromodulename.controller.Lista", {
 
-        onInit : function (){
+        onInit: function () {
             this.oRouter = sap.ui.core.UIComponent.getRouterFor(this);
             this.oRouter
-            .getTarget("TargetLista") //sempre alterar o target
-            .attachDisplay(this.handleRouteMatched, this);
+                .getTarget("TargetLista") //sempre alterar o target
+                .attachDisplay(this.handleRouteMatched, this);
         },
 
         handleRouteMatched: function () {
@@ -21,7 +21,7 @@ sap.ui.define([
         onPress: function (evt) {
             MessageToast.show(evt.getSource().getId() + " Pressed");
         },
-        
+
         //cria o modelg
         createModel: function () {
             this.getView().setModel(
@@ -40,40 +40,40 @@ sap.ui.define([
                         }
                     ]
                 }),
-                    "oModelLista"
-                );
+                "oModelLista"
+            );
 
             this.oViewModel = this.getView().getModel("oModelLista");
-        }, 
+        },
 
-        onDigitando : function(evt){
+        onDigitando: function (evt) {
             var teste;
         },
 
-        getTableCapacity : async function() {
+        getTableCapacity: async function () {
             let oData;
             let oModel = this.getOwnerComponent().getModel();
             let Service = "/Cadastro"
 
             let oFilter = new sap.ui.model.Filter("ID", sap.ui.model.FilterOperator.EQ, 2);
-            
+
             //V4 - Tipo 1
             let oListBinding = oModel.bindList(Service);
             oListBinding.filter([oFilter]);
             let aContext = await oListBinding.requestContexts();
 
-            if (aContext.length > 0){
+            if (aContext.length > 0) {
                 oData = aContext[0].getObject();
 
                 let payload = [
                     {
-                        ID : oData.ID,
-                        name : oData.nome,
+                        ID: oData.ID,
+                        name: oData.nome,
                         cpf: oData.cpf
                     }
                 ]
 
-                if(oData){
+                if (oData) {
                     this.oViewModel.setProperty("/Lista2", payload);
                 }
             }
@@ -90,6 +90,25 @@ sap.ui.define([
                 });
             }); */
         },
+
+        onBuscar: async function () {
+            const oModel = this.getOwnerComponent().getModel();
+
+            const sID = this.byId("inputID").getValue();
+
+            const oContext = oModel.bindContext(`/TesteCadastro(ID=${sID})`);
+
+            const oData = await oContext.requestObject();
+
+            console.log(oData);
+
+            // joga no model da view
+            const oJson = new sap.ui.model.json.JSONModel({
+                Lista: oData.value // geralmente vem em .value
+            });
+
+            this.getView().setModel(oJson, "resultado");
+        }
 
     });
 });

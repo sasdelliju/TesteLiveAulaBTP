@@ -118,5 +118,13 @@
     
     </List>		
 
+	<Input id="inputID" placeholder="Digite o ID" />
+
+	<Button text="Buscar" press="onBuscar" />	
+
+	<List items="{resultado>/Lista}">
+		<StandardListItem title="{resultado>ID} - {resultado>nome}" />
+	</List>	
+
 	</Page>
 </mvc:View>
