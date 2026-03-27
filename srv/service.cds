@@ -7,5 +7,10 @@ service AulasBTP {
 
     function TesteCadastro(ID : Integer) returns array of Cadastro;
 
+    action CriarCadastro(
+        ID   : Integer,
+        nome : String,
+        cpf  : String
+    ) returns Cadastro;
 
 }
