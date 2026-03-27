@@ -93,21 +93,72 @@ sap.ui.define([
 
         onBuscar: async function () {
             const oModel = this.getOwnerComponent().getModel();
-
             const sID = this.byId("inputID").getValue();
 
-            const oContext = oModel.bindContext(`/TesteCadastro(ID=${sID})`);
+            try {
+                const oContext = oModel.bindContext(`/TesteCadastro(ID=${sID})`);
 
-            const oData = await oContext.requestObject();
+                const oData = await oContext.requestObject();
 
-            console.log(oData);
+                const oJson = new sap.ui.model.json.JSONModel({
+                    Lista: oData.value
+                });
 
-            // joga no model da view
-            const oJson = new sap.ui.model.json.JSONModel({
-                Lista: oData.value // geralmente vem em .value
-            });
+                this.getView().setModel(oJson, "resultado");
 
-            this.getView().setModel(oJson, "resultado");
+            } catch (err) {
+
+                // 🔥 limpa a lista da tela
+                this.getView().getModel("resultado")?.setProperty("/Lista", []);
+
+                const sMensagem =
+                    err?.error?.message ||
+                    err?.cause?.error?.message ||
+                    "Erro ao buscar cadastro";
+
+                //sap.m.MessageBox.error(sMensagem);
+                MessageToast.show(sMensagem);
+            }
+        },
+
+        onCriarCadastro: async function () {
+
+            const oModel = this.getOwnerComponent().getModel();
+
+            const iID = parseInt(this.byId("inputIDD").getValue());
+            const sNome = this.byId("inputNome").getValue();
+            const sCpf = this.byId("inputCpf").getValue();
+
+            try {
+
+                // 🔥 chamada da ACTION (V4)
+                const oContext = oModel.bindContext("/CriarCadastro(...)");
+
+                oContext.setParameter("ID", iID);
+                oContext.setParameter("nome", sNome);
+                oContext.setParameter("cpf", sCpf);
+
+                const oResult = await oContext.execute();
+
+                sap.m.MessageToast.show("Cadastro criado com sucesso");
+
+                // opcional: limpar inputs
+                this.byId("inputIDD").setValue("");
+                this.byId("inputNome").setValue("");
+                this.byId("inputCpf").setValue("");
+
+            } catch (err) {
+
+                let sMensagem = "Erro ao criar cadastro";
+
+                if (err?.responseText) {
+                    try {
+                        sMensagem = JSON.parse(err.responseText).error.message;
+                    } catch { }
+                }
+
+                sap.m.MessageBox.error(sMensagem);
+            }
         }
 
     });

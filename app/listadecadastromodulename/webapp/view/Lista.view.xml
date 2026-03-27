@@ -126,5 +126,17 @@
 		<StandardListItem title="{resultado>ID} - {resultado>nome}" />
 	</List>	
 
+	<VBox>
+
+		<Input id="inputIDD" placeholder="ID" type="Number" />
+
+		<Input id="inputNome" placeholder="Nome" />
+
+		<Input id="inputCpf" placeholder="CPF" />
+
+		<Button text="Cadastrar" press="onCriarCadastro" />
+
+	</VBox>
+
 	</Page>
 </mvc:View>
