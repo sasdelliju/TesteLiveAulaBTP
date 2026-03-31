@@ -14,6 +14,16 @@
     "start": "cds-serve",
     "watch-listadecadastromodulename": "cds watch --open listadecadastromodulename/index.html?sap-ui-xx-viewCache=false --livereload false"
   },
+  "cds": {
+    "requires": {
+      "db": {
+        "kind": "sqlite",
+        "credentials": {
+          "database": "db.sqlite"
+        }
+      }
+    }
+  },
   "private": true,
   "workspaces": [
     "app/*"

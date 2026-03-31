@@ -121,6 +121,59 @@ sap.ui.define([
             }
         },
 
+        onOpenDialog: function () {
+            this.byId("dialogCadastro").open();
+        },
+
+        onCloseDialog: function () {
+            this.byId("dialogCadastro").close();
+        },
+
+        onCriarCadastroDialog: async function () {
+
+            const oModel = this.getOwnerComponent().getModel();
+
+            const iID = parseInt(this.byId("inputIDDialog").getValue());
+            const sNome = this.byId("inputNomeDialog").getValue();
+            const sCpf = this.byId("inputCpfDialog").getValue();
+
+            try {
+
+                const oContext = oModel.bindContext("/CriarCadastro(...)");
+
+                oContext.setParameter("ID", iID);
+                oContext.setParameter("nome", sNome);
+                oContext.setParameter("cpf", sCpf);
+
+                await oContext.execute();
+
+                sap.m.MessageToast.show("Cadastro criado com sucesso");
+
+                // 🔥 limpar campos
+                this.byId("inputIDDialog").setValue("");
+                this.byId("inputNomeDialog").setValue("");
+                this.byId("inputCpfDialog").setValue("");
+
+                // 🔥 fechar popup
+                this.byId("dialogCadastro").close();
+
+                // 🔥 opcional: atualizar lista
+                // this.getTableCapacity(); OU refazer busca
+
+            } catch (err) {
+
+                let sMensagem = "Erro ao criar cadastro";
+
+                if (err?.responseText) {
+                    try {
+                        sMensagem = JSON.parse(err.responseText).error.message;
+                    } catch { }
+                }
+
+                sap.m.MessageBox.error(sMensagem);
+            }
+        },
+
         onCriarCadastro: async function () {
 
             const oModel = this.getOwnerComponent().getModel();

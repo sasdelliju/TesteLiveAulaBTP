@@ -126,17 +126,29 @@
 		<StandardListItem title="{resultado>ID} - {resultado>nome}" />
 	</List>	
 
-	<VBox>
+	<Button text="Incluir Cadastro" press="onOpenDialog" />
 
-		<Input id="inputIDD" placeholder="ID" type="Number" />
+	<Dialog id="dialogCadastro" title="Novo Cadastro">
 
-		<Input id="inputNome" placeholder="Nome" />
+		<VBox class="sapUiSmallMargin">
 
-		<Input id="inputCpf" placeholder="CPF" />
+			<Input id="inputIDDialog" placeholder="ID" type="Number" />
 
-		<Button text="Cadastrar" press="onCriarCadastro" />
+			<Input id="inputNomeDialog" placeholder="Nome" />
 
-	</VBox>
+			<Input id="inputCpfDialog" placeholder="CPF" />
+
+		</VBox>
+
+		<beginButton>
+			<Button text="Cadastrar" press="onCriarCadastroDialog" type="Emphasized"/>
+		</beginButton>
+
+		<endButton>
+			<Button text="Cancelar" press="onCloseDialog" />
+		</endButton>
+
+	</Dialog>
 
 	</Page>
 </mvc:View>
