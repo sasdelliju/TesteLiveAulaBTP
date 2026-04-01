@@ -174,6 +174,28 @@ sap.ui.define([
             }
         },
 
+        onBuscarCEP: function () {
+            var sCEP = this.byId("inputCep").getValue();
+            var that = this;
+
+            fetch("https://viacep.com.br/ws/" + sCEP + "/json/")
+                .then(function (response) {
+                    return response.json();
+                })
+                .then(function (data) {
+
+                    // cria model JSON
+                    var oModel = new sap.ui.model.json.JSONModel(data);
+
+                    // seta na view com nome "cep"
+                    that.getView().setModel(oModel, "cep");
+
+                })
+                .catch(function (error) {
+                    console.error("Erro na API:", error);
+                });
+        },
+
         onCriarCadastro: async function () {
 
             const oModel = this.getOwnerComponent().getModel();
